@@ -13,7 +13,12 @@ mapping['num'] = int(mapping['mapping_num'])
 
 
 def apply_mapping(mat, mapping):
-    bins = mapping['num']
+    """
+    将LBP矩阵映射成特征向量
+    :param mat: LBP矩阵
+    :param mapping: 映射表
+    :return: 映射后得到的特征向量
+    """
     result = np.zeros([mat.shape[0], mat.shape[1]])
     for i in range(mat.shape[0]):
         for j in range(mat.shape[1]):

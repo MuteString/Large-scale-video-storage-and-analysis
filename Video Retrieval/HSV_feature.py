@@ -8,7 +8,7 @@ def hsv_features(image_path):
     """
     获取图像的HSV颜色特征
     :param image_path: 需要处理的图像路径
-    :return: 处理得到的颜色特征向量
+    :return: 81位颜色特征向量
     """
     # 读取图片并从RBG色彩空间转换到HSV色彩空间
     image = cv.imread(image_path)
@@ -28,7 +28,7 @@ def hsv_features(image_path):
             tmp_h = math.floor(image_H[i][j]/0.111112)
             tmp_s = math.floor(image_S[i][j]/0.333334)
             tmp_v = math.floor(image_V[i][j]/0.333334)
-            d = tmp_h*9+tmp_s*3+tmp_v+1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的第4列区域
@@ -37,7 +37,7 @@ def hsv_features(image_path):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的第1行区域
@@ -46,7 +46,7 @@ def hsv_features(image_path):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的第4行区域
@@ -55,7 +55,7 @@ def hsv_features(image_path):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的中间区域
@@ -64,7 +64,7 @@ def hsv_features(image_path):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 2
 
     return t_feature
