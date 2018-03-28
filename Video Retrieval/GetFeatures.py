@@ -1,11 +1,11 @@
 # coding: utf-8
 
 import scipy.io
-import cv2 as cv
+import skimage.io as skio
+import skimage.color as skcolor
 import numpy as np
 import math
-from skimage.feature import local_binary_pattern
-
+from skimage.feature import local_binary_pattern, greycomatrix, greycoprops
 
 # 初始化全局变量
 PI = math.pi
@@ -78,7 +78,7 @@ def hsv_features(image_H, image_S, image_V, image_height, image_width):
             d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
             t_feature[d] = t_feature[d] + 2
 
-    return t_feature
+    return list(t_feature)
 
 
 """
@@ -101,10 +101,11 @@ def apply_mapping(mat, mapping):
     for i in result:
         single_result.extend(i)
     result_dict = {k: single_result.count(k)/(mat.shape[0]*mat.shape[1]) for k in set(single_result)}
-    return result_dict
+    result = [result_dict[k] for k in result_dict]
+    return result
 
 
-def lbp_feature(r, n, image_gray):
+def get_lbp(r, n, image_gray):
     """
     使用LBP算子提取灰度图像的LBP特征图，并将其映射到特征向量
     :param r: lbp算子半径
@@ -121,6 +122,9 @@ def lbp_feature(r, n, image_gray):
     return lbp_vec
 
 
+def lbp_feature(image_gray):
+    return get_lbp(2, 8, image_gray)+ get_lbp(3, 8, image_gray) + get_lbp(4, 8, image_gray)
+
 """
 Tchebichef矩特征提取
 不要试图去看懂这部分代码！！！！！！
@@ -131,7 +135,7 @@ Tchebichef矩特征提取
 def F(r, v, image_height, image_width, image):
     x = int(r*math.cos(PI*v/180)+image_height/2)
     y = int(r*math.sin(PI*v/180)+image_width/2)
-    f = float(image(x, y))/255
+    f = float(image[x][y])/255
     return f
 
 
@@ -167,7 +171,7 @@ def fast_tchebichef(p, q, image_height, image_width, image):
     :param image: 灰度图像
     :return:
     """
-    m = min(image_height/2-1, image_width/2-1)
+    m = int(min(image_height/2-1, image_width/2-1))
     sum = 0
     I = math.cos(q*358*PI/180)
     K = math.cos(q*359*PI/180)
@@ -190,7 +194,29 @@ def tchebichef_features(image_gray, image_height, image_width):
     t_feature = np.zeros(5)
     for i in range(5):
         t_feature[i] = (fast_tchebichef(i, 8, image_height, image_width, image_gray) + 1) / 2
-    return t_feature
+    return list(t_feature)
+
+
+"""
+纹理特征提取
+"""
+
+
+def glcm_feature(image_gray):
+    """
+    基于灰度共生矩阵的纹理特征提取
+    :param image_gray: 灰度图像
+    :return: 灰度图像的六种纹理特征
+    """
+    image_gray = np.uint(np.floor(image_gray / 0.33333334))
+    image_glcm = greycomatrix(image_gray, [1], [0], 3)
+    image_glcm_feature = [int(greycoprops(image_glcm, 'contrast')),
+                          int(greycoprops(image_glcm, 'dissimilarity')),
+                          int(greycoprops(image_glcm, 'homogeneity')),
+                          int(greycoprops(image_glcm, 'energy')),
+                          int(greycoprops(image_glcm, 'ASM')),
+                          int(greycoprops(image_glcm, 'correlation'))]
+    return image_glcm_feature
 
 
 """
@@ -200,12 +226,24 @@ def tchebichef_features(image_gray, image_height, image_width):
 
 def get_features(image_path):
     # 图像预处理
-    image = cv.image_read(image_path)  # 载入图像
-    image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)        # 原始图像转换为灰度图像
-    image_hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV_FULL)     # 原始图像转换为HSV图像
-    image_hsv_H = np.array(image[:, :, 0]) / 255  # HSV色调（Hue）分量
-    image_hsv_S = np.array(image[:, :, 1]) / 255  # HSV饱和度(Saturation)分量
-    image_hsv_V = np.array(image[:, :, 2]) / 255  # HSV亮度（Value）分量
+    image = skio.imread(image_path)  # 载入图像
+    image_gray = skcolor.rgb2gray(image)       # 原始图像转换为灰度图像
+    image_hsv = skcolor.rgb2hsv(image)    # 原始图像转换为HSV图像
+    image_hsv_H = np.array(image_hsv[:, :, 0]) / 255  # HSV色调（Hue）分量
+    image_hsv_S = np.array(image_hsv[:, :, 1]) / 255  # HSV饱和度(Saturation)分量
+    image_hsv_V = np.array(image_hsv[:, :, 2]) / 255  # HSV亮度（Value）分量
     image_height = image.shape[0]         # 图像的高度值
     image_width = image.shape[1]          # 图像的宽度值
 
+    # 颜色特征提取
+    return hsv_features(image_hsv_H, image_hsv_S, image_hsv_V, image_height, image_width) + \
+           glcm_feature(image_gray) + \
+           tchebichef_features(image_gray, image_height, image_width) + \
+           lbp_feature(image_gray)
+
+
+if __name__ == '__main__':
+    my_feature = get_features('v_shooting_01_01_0.jpg')
+    print(my_feature)
+    print(len(my_feature))
+    pass
