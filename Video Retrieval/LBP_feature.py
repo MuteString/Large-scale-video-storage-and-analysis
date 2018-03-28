@@ -40,3 +40,8 @@ def lbp_feature(r, n, image_path):
     lbp = local_binary_pattern(image, n_points, radius)  # 提取LBP特征
     lbp_vec = apply_mapping(lbp, mapping)                # 映射特征到特征向量
     return lbp_vec
+
+
+if __name__ == "__main__":
+    image_path = 'v_shooting_01_01_0.jpg'
+    print(lbp_feature(2, 8, image_path))
