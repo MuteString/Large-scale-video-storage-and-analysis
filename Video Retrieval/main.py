@@ -64,7 +64,7 @@ def video_similarity(samples, video, step):
                 # dist += np.linalg.norm(np.array(samples[wind_i*length_video+j])
                 # - np.array(video[wind_i*length_video+j]))
                 dist = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][wind_i * video + j]) - np.array(video[0][j]))))
+                    np.array(samples[0][wind_i * length_video + j]) - np.array(video[0][j]))))
             if dist <= min_dist:
                 min_dist = dist
                 min_start_frame = wind_i * length_video
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     for video in Video_Features_ALL:
         Dist_list[video] = video_similarity(Sample_Feature, Video_Features_ALL[video], Step)
         print("Get", video, 'distance.')
-    sorted_Dist = sorted(Dist_list.keys())
+    sorted_Dist = sorted(Dist_list.items(), key=lambda d: d[1])
     print(r"######## Similar Video ##########")
     for i in sorted_Dist:
         print(i)
