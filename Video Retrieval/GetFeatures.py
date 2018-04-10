@@ -6,6 +6,13 @@ import skimage.color as skcolor
 import numpy as np
 import math
 from skimage.feature import local_binary_pattern, greycomatrix, greycoprops
+import cv2 as cv
+
+
+"""
+入口函数是 get_features(image_path)
+"""
+
 
 # 初始化全局变量
 PI = math.pi
@@ -39,7 +46,7 @@ def hsv_features(image_H, image_S, image_V, image_height, image_width):
             tmp_h = math.floor(image_H[i][j]/0.111112)
             tmp_s = math.floor(image_S[i][j]/0.333334)
             tmp_v = math.floor(image_V[i][j]/0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的第4列区域
@@ -48,7 +55,7 @@ def hsv_features(image_H, image_S, image_V, image_height, image_width):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的第1行区域
@@ -57,7 +64,7 @@ def hsv_features(image_H, image_S, image_V, image_height, image_width):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的第4行区域
@@ -66,7 +73,7 @@ def hsv_features(image_H, image_S, image_V, image_height, image_width):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 1
 
     # 计算4x4区域中的中间区域
@@ -75,7 +82,7 @@ def hsv_features(image_H, image_S, image_V, image_height, image_width):
             tmp_h = math.floor(image_H[i][j] / 0.111112)
             tmp_s = math.floor(image_S[i][j] / 0.333334)
             tmp_v = math.floor(image_V[i][j] / 0.333334)
-            d = tmp_h * 9 + tmp_s * 3 + tmp_v + 1
+            d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 2
 
     return list(t_feature)
@@ -208,7 +215,7 @@ def glcm_feature(image_gray):
     :param image_gray: 灰度图像
     :return: 灰度图像的六种纹理特征
     """
-    image_gray = np.uint(np.floor(image_gray / 0.33333334))
+    image_gray = np.uint(np.floor(image_gray / 255 / 0.33333334))
     image_glcm = greycomatrix(image_gray, [1], [0], 3)
     image_glcm_feature = [int(greycoprops(image_glcm, 'contrast')),
                           int(greycoprops(image_glcm, 'dissimilarity')),
@@ -220,15 +227,15 @@ def glcm_feature(image_gray):
 
 
 """
-特征计算与融合，分别提取四种特征，并将四种特种融合成一个81维的特征向量
+特征计算与融合，分别提取四种特征，并将四种特种融合成一个122维的特征向量
 """
 
 
-def get_features(image_path):
+def get_features(image):
     # 图像预处理
-    image = skio.imread(image_path)  # 载入图像
-    image_gray = skcolor.rgb2gray(image)       # 原始图像转换为灰度图像
-    image_hsv = skcolor.rgb2hsv(image)    # 原始图像转换为HSV图像
+    # image = skio.imread(image_path)  # 载入图像
+    image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)       # 原始图像转换为灰度图像
+    image_hsv = cv.cvtColor(image, cv.COLOR_BGR2HLS_FULL)    # 原始图像转换为HSV图像
     image_hsv_H = np.array(image_hsv[:, :, 0]) / 255  # HSV色调（Hue）分量
     image_hsv_S = np.array(image_hsv[:, :, 1]) / 255  # HSV饱和度(Saturation)分量
     image_hsv_V = np.array(image_hsv[:, :, 2]) / 255  # HSV亮度（Value）分量
@@ -242,8 +249,10 @@ def get_features(image_path):
            lbp_feature(image_gray)
 
 
+# 测试脚本
 if __name__ == '__main__':
-    my_feature = get_features('v_shooting_01_01_0.jpg')
+    image = cv.imread('v_shooting_01_01_0.jpg')
+    my_feature = get_features(image)
     print(my_feature)
     print(len(my_feature))
     pass
