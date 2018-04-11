@@ -243,10 +243,10 @@ def get_features(image):
     image_width = image.shape[1]          # 图像的宽度值
 
     # 颜色特征提取
-    return hsv_features(image_hsv_H, image_hsv_S, image_hsv_V, image_height, image_width) + \
-           glcm_feature(image_gray) + \
-           tchebichef_features(image_gray, image_height, image_width) + \
-           lbp_feature(image_gray)
+    return [hsv_features(image_hsv_H, image_hsv_S, image_hsv_V, image_height, image_width),
+           glcm_feature(image_gray),
+           tchebichef_features(image_gray, image_height, image_width),
+           lbp_feature(image_gray)]
 
 
 # 测试脚本

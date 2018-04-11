@@ -16,7 +16,7 @@ def get_video_features(path, step):
     """
     step_counter = 0
     Step = step   # 每间隔step帧提取一帧
-    VideoName = path.split('\\')[-1].split('.')[0]
+    VideoName = path.split('/')[-1].split('.')[0]
     VideoFeature = []
     Sample_Video = cv.VideoCapture(path)
     FPS = Sample_Video.get(cv.CAP_PROP_FPS)
@@ -50,10 +50,15 @@ def video_similarity(samples, video, step):
         for wind_i in range(0, int(length_video/length_sample)):
             dist = 0
             for j in range(length_sample):
-                # dist += np.linalg.norm(np.array(samples[wind_i*length_sample+j])
-                # - np.array(video[wind_i*length_sample+j]))
-                dist = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][j]) - np.array(video[0][wind_i*length_sample+j]))))
+                dist0 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][j][0]) - np.array(video[0][wind_i*length_sample+j][0]))))
+                dist1 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][j][1]) - np.array(video[0][wind_i*length_sample+j][1]))))
+                dist2 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][j][2]) - np.array(video[0][wind_i*length_sample+j][2]))))
+                dist3 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][j][3]) - np.array(video[0][wind_i*length_sample+j][3]))))
+                dist += dist0 + dist1 + dist2 + dist3
             if dist <= min_dist:
                 min_dist = dist
                 min_start_frame = wind_i * length_sample
@@ -61,14 +66,22 @@ def video_similarity(samples, video, step):
         for wind_i in range(0, int(length_sample/length_video)):
             dist = 0
             for j in range(length_video):
-                # dist += np.linalg.norm(np.array(samples[wind_i*length_video+j])
-                # - np.array(video[wind_i*length_video+j]))
-                dist = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][wind_i * length_video + j]) - np.array(video[0][j]))))
+                dist0 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][wind_i*length_video + j][0]) - np.array(video[0][j][0]))))
+                dist1 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][wind_i*length_video + j][1]) - np.array(video[0][j][1]))))
+                dist2 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][wind_i*length_video + j][2]) - np.array(video[0][j][2]))))
+                dist3 = np.sqrt(np.sum(np.square(
+                    np.array(samples[0][wind_i*length_video + j][3]) - np.array(video[0][j][3]))))
+                dist += dist0 + dist1 + dist2 + dist3
             if dist <= min_dist:
                 min_dist = dist
                 min_start_frame = wind_i * length_video
     min_start_time = float(min_start_frame * step / video[1])
+    m, s = divmod(min_start_time, 60)
+    h, m = divmod(m, 60)
+    min_start_time = '%02d:%02d:%02d' % (h, m, s)
     return min_dist, min_start_time
 
 
@@ -92,10 +105,15 @@ def get_all_video_feature(file_path, step):
     Video_list = get_file_path(file_path)  # 获取所有待检测视频文件路径
     # 计算所有待检索视频的特征图序列
     for video in Video_list:
-        Video_Features_all[video.split('\\')[2]] = get_video_features(video, Step)
-        print("Get", video.split('\\')[2], 'feature map.')
+        # 由于操作系统差异，在获取文件路径进行截取时，windows操作系统和linux操作系统需要进行一些差异化处理
+        # windows下使用如下代码
+        Video_Features_all[video.split('\\')[1]] = get_video_features(video, Step)
+        print("Get", video.split('\\')[1], 'feature map.')
+        # linux下使用如下代码
+        # Video_Features_all[video.split('/')[2]] = get_video_features(video, Step)
+        # print("Get", video.split('/')[2], 'feature map.')
     # 存储特征图序列
-    trained_Feature = open('..\\trained_feature.pkl', 'wb')
+    trained_Feature = open('../trained_feature.pkl', 'wb')
     pickle.dump(Video_Features_all, trained_Feature)
     trained_Feature.close()
 
@@ -106,15 +124,15 @@ if __name__ == '__main__':
     Dist_list = {}            # 存储所有待检测视频和样例视频的距离（距离越小相似度越高）
 
     # 获取所有待检索视频的特征图序列(只需执行一次)
-    get_all_video_feature('..\\Videos4Retrieval', 20)
+    get_all_video_feature('../Videos4Retrieval', 20)
 
     # 获取样例视频特征图序列
-    Sample_Path = "SampleVideo\\v_biking_01_02.avi"
+    Sample_Path = "SampleVideo/v_biking_01_02.avi"
     Sample_Feature = get_video_features(Sample_Path, Step)
     print('Get Sample Video feature map.')
 
     # 加载事先存储的所有视频的特征图序列
-    trained_feature = open('..\\trained_feature.pkl', 'rb')
+    trained_feature = open('../trained_feature.pkl', 'rb')
     Video_Features_ALL = pickle.load(trained_feature)
 
     # 进行特征匹配
