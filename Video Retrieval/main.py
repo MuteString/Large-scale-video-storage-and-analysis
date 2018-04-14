@@ -5,6 +5,7 @@ import numpy as np
 from GetFeatures import get_features
 import os
 import pickle
+from utils import cosVector, euclideanDist, corrcoef
 
 
 def get_video_features(path, step):
@@ -41,40 +42,77 @@ def video_similarity(samples, video, step):
     :param video: 待检索视频的特征图序列
     :return: min_dist:待检索视频和样例视频的距离
              min_start_time:最相似的帧序列在视频中的开始时间
+             cos:以夹角余弦定义的相似度
     """
     length_sample = len(samples[0])
     length_video = len(video[0])
     min_dist = 9999999999999
+    max_cos = 0
+    max_cor = 0
     min_start_frame = 0
     if length_sample <= length_video:
         for wind_i in range(0, int(length_video/length_sample)):
             dist = 0
+            cos = 0
+            cor = 0
             for j in range(length_sample):
-                dist0 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][j][0]) - np.array(video[0][wind_i*length_sample+j][0]))))
-                dist1 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][j][1]) - np.array(video[0][wind_i*length_sample+j][1]))))
-                dist2 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][j][2]) - np.array(video[0][wind_i*length_sample+j][2]))))
-                dist3 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][j][3]) - np.array(video[0][wind_i*length_sample+j][3]))))
+                # 计算欧式距离
+                dist0 = euclideanDist(samples[0][j][0], video[0][wind_i * length_sample +j][0])
+                dist1 = euclideanDist(samples[0][j][1], video[0][wind_i * length_sample + j][1])
+                dist2 = euclideanDist(samples[0][j][2], video[0][wind_i * length_sample + j][2])
+                dist3 = euclideanDist(samples[0][j][3], video[0][wind_i * length_sample + j][3])
                 dist += dist0 + dist1 + dist2 + dist3
+                # 计算夹角余弦
+                cos0 = cosVector(samples[0][j][0], video[0][wind_i * length_sample + j][0])
+                cos1 = cosVector(samples[0][j][1], video[0][wind_i * length_sample + j][1])
+                cos2 = cosVector(samples[0][j][2], video[0][wind_i * length_sample + j][2])
+                cos3 = cosVector(samples[0][j][3], video[0][wind_i * length_sample + j][3])
+                cos += (cos0 + cos1 + cos2 + cos3) / 4
+                # 计算皮尔逊相关系数
+                cor0 = corrcoef(samples[0][j][0], video[0][wind_i * length_sample + j][0])
+                cor1 = corrcoef(samples[0][j][1], video[0][wind_i * length_sample + j][1])
+                cor2 = corrcoef(samples[0][j][2], video[0][wind_i * length_sample + j][2])
+                cor3 = corrcoef(samples[0][j][3], video[0][wind_i * length_sample + j][3])
+                cor += (cor0 + cor1 + cor2 + cor3) / 4
+            cos = float(cos / length_sample)
+            cor = float(cor / length_sample)
+            if cor > max_cor:
+                max_cor = cor
+            if cos > max_cos:
+                max_cos = cos
             if dist <= min_dist:
                 min_dist = dist
                 min_start_frame = wind_i * length_sample
     else:
         for wind_i in range(0, int(length_sample/length_video)):
             dist = 0
+            cos = 0
+            cor = 0
             for j in range(length_video):
-                dist0 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][wind_i*length_video + j][0]) - np.array(video[0][j][0]))))
-                dist1 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][wind_i*length_video + j][1]) - np.array(video[0][j][1]))))
-                dist2 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][wind_i*length_video + j][2]) - np.array(video[0][j][2]))))
-                dist3 = np.sqrt(np.sum(np.square(
-                    np.array(samples[0][wind_i*length_video + j][3]) - np.array(video[0][j][3]))))
+                # 计算欧式距离
+                dist0 = euclideanDist(samples[0][wind_i * length_video + j][0], video[0][j][0])
+                dist1 = euclideanDist(samples[0][wind_i * length_video + j][1], video[0][j][1])
+                dist2 = euclideanDist(samples[0][wind_i * length_video + j][2], video[0][j][2])
+                dist3 = euclideanDist(samples[0][wind_i * length_video + j][3], video[0][j][3])
                 dist += dist0 + dist1 + dist2 + dist3
+                # 计算夹角余弦
+                cos0 = cosVector(samples[0][wind_i * length_video + j][0], video[0][j][0])
+                cos1 = cosVector(samples[0][wind_i * length_video + j][1], video[0][j][1])
+                cos2 = cosVector(samples[0][wind_i * length_video + j][2], video[0][j][2])
+                cos3 = cosVector(samples[0][wind_i * length_video + j][3], video[0][j][3])
+                cos += (cos0 + cos1 + cos2 + cos3) / 4
+                # 计算皮尔逊相关系数
+                cor0 = corrcoef(samples[0][wind_i * length_video + j][0], video[0][j][0])
+                cor1 = corrcoef(samples[0][wind_i * length_video + j][1], video[0][j][1])
+                cor2 = corrcoef(samples[0][wind_i * length_video + j][2], video[0][j][2])
+                cor3 = corrcoef(samples[0][wind_i * length_video + j][3], video[0][j][3])
+                cor += (cor0 + cor1 + cor2 + cor3) / 4
+            cor = float(cor / length_video)
+            cos = float(cos / length_video)
+            if cor > max_cor:
+                max_cor = cor
+            if cos > max_cos:
+                max_cos = cos
             if dist <= min_dist:
                 min_dist = dist
                 min_start_frame = wind_i * length_video
@@ -82,7 +120,7 @@ def video_similarity(samples, video, step):
     m, s = divmod(min_start_time, 60)
     h, m = divmod(m, 60)
     min_start_time = '%02d:%02d:%02d' % (h, m, s)
-    return min_dist, min_start_time
+    return min_dist, min_start_time, max_cos, cor
 
 
 def get_file_path(file_dir):
@@ -124,7 +162,7 @@ if __name__ == '__main__':
     Dist_list = {}            # 存储所有待检测视频和样例视频的距离（距离越小相似度越高）
 
     # 获取所有待检索视频的特征图序列(只需执行一次)
-    get_all_video_feature('../Videos4Retrieval', 20)
+    # get_all_video_feature('../Videos4Retrieval', 20)
 
     # 获取样例视频特征图序列
     Sample_Path = "SampleVideo/v_biking_01_02.avi"
