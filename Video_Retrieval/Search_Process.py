@@ -2,10 +2,10 @@
 
 import cv2 as cv
 import numpy as np
-from GetFeatures import get_features
+from .GetFeatures import get_features
 import os
 import pickle
-from utils import cosVector, euclideanDist, corrcoef
+from .utils import cosVector, euclideanDist, corrcoef
 
 
 def get_video_features(path, step):

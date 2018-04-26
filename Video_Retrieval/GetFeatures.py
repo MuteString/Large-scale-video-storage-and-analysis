@@ -16,7 +16,7 @@ import cv2 as cv
 
 # 初始化全局变量
 PI = math.pi
-mapping = scipy.io.loadmat('mapping.mat')
+mapping = scipy.io.loadmat('../Resources/mapping.mat')
 mapping['table'] = np.array(mapping['mapping_table']).T
 mapping['samples'] = int(mapping['mapping_samples'])
 mapping['num'] = int(mapping['mapping_num'])
