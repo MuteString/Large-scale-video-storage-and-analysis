@@ -10,7 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from Video_Retrieval import GetFeatures, Search_Process
 
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(QtWidgets.QMainWindow):
     SAMPLE_PATH = ''
     SAMPLE_NAME = ''
 
