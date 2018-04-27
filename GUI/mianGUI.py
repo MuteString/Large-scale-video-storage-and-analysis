@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from Video_Retrieval import GetFeatures, Search_Process
 
 
@@ -124,6 +124,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.menubar.setObjectName("menubar")
         self.menu_file = QtWidgets.QMenu(self.menubar)
         self.menu_file.setObjectName("menu_file")
+        self.menu_set = QtWidgets.QMenu(self.menubar)
+        self.menu_set.setObjectName("menu_set")
         self.menu_about = QtWidgets.QMenu(self.menubar)
         self.menu_about.setObjectName("menu_about")
         # MainWindow.setMenuBar(self.menubar)
@@ -160,11 +162,12 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.choosefile_btn.setText(_translate("MainWindow", "浏览"))
         self.confirm_btn.setText(_translate("MainWindow", "搜索"))
         self.menu_file.setTitle(_translate("MainWindow", "文件"))
+        self.menu_set.setTitle(_translate("MainWindow", "设置"))
         self.menu_about.setTitle(_translate("MainWindow", "关于"))
         self.actionopen_file.setText(_translate("MainWindow", "打开文件"))
 
     def OpenFile(self):
-        filepath, _ = QtWidgets.QFileDialog.getOpenFileName(None, '打开文件', './', "视频文件(*.avi *.mp4)")
+        filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self, '打开文件', './', "视频文件(*.avi *.mp4)")
         self.SAMPLE_PATH = filepath
         self.SAMPLE_NAME = filepath.split('/')[-1]
         self.filepath_lineEdit.setText(self.SAMPLE_NAME)
@@ -172,9 +175,17 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def SearchVideo(self):
         if self.SAMPLE_PATH != '':
             print(self.SAMPLE_PATH)
-            # GetFeatures.get_features(self.SAMPLE_PATH)
+            result_list = Search_Process.search_process(20, self.SAMPLE_PATH)
         else:
-            unselect_message = QtWidgets.QErrorMessage(self, "请先选择样例视频。")
+            unselect_message = QtWidgets.QMessageBox.information(self, "未选择样例视频", "请先选择需要进行搜索的样例视频。")
+
+    def AddPictures(self, name, path):
+        pic_button = QtWidgets.QToolButton()
+        pic_button.setText(name)
+        pic_button.setIcon(path)
+        pic_button.setIconSize(QtCore.QSize(240, 320))
+        pic_button.setAutoRaise(True)
+        pic_button.setToolButtonStyle(Qt.Qt.ToolButtonTextUnderIcon)
 
 
 if __name__ == "__main__":

@@ -156,16 +156,17 @@ def get_all_video_feature(file_path, step):
     trained_Feature.close()
 
 
-if __name__ == '__main__':
+def search_process(setp, sample_path):
     # 初始化相关变量
-    Step = 20                 # 选择帧的间隔
+    Step = setp                 # 选择帧的间隔
     Dist_list = {}            # 存储所有待检测视频和样例视频的距离（距离越小相似度越高）
 
     # 获取所有待检索视频的特征图序列(只需执行一次)
     # get_all_video_feature('../Videos4Retrieval', 20)
 
     # 获取样例视频特征图序列
-    Sample_Path = "SampleVideo/v_biking_01_02.avi"
+    # Sample_Path = "SampleVideo/v_biking_01_02.avi"
+    Sample_Path = sample_path
     Sample_Feature = get_video_features(Sample_Path, Step)
     print('Get Sample Video feature map.')
 
@@ -181,3 +182,4 @@ if __name__ == '__main__':
     print(r"######## Similar Video ##########")
     for i in sorted_Dist:
         print(i)
+    return sorted_Dist
