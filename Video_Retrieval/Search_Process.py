@@ -8,6 +8,15 @@ import pickle
 from .utils import cosVector, euclideanDist, corrcoef
 
 
+def get_thumbs(path):
+    VideoList = get_file_path(path)
+    for video in VideoList:
+        sample_video = cv.VideoCapture(video)
+        sample_name = video.split('/')[-1].split('.')[0]
+        ret, thumb = sample_video.read()
+        cv.imwrite('../Videos4Retrieval/thumbs/' + sample_name + '.jpg', thumb)
+
+
 def get_video_features(path, step):
     """
     获取样例视频的特征图序列
@@ -145,11 +154,11 @@ def get_all_video_feature(file_path, step):
     for video in Video_list:
         # 由于操作系统差异，在获取文件路径进行截取时，windows操作系统和linux操作系统需要进行一些差异化处理
         # windows下使用如下代码
-        Video_Features_all[video.split('\\')[1]] = get_video_features(video, Step)
-        print("Get", video.split('\\')[1], 'feature map.')
+        # Video_Features_all[video.split('\\')[1]] = get_video_features(video, Step)
+        # print("Get", video.split('\\')[1], 'feature map.')
         # linux下使用如下代码
-        # Video_Features_all[video.split('/')[2]] = get_video_features(video, Step)
-        # print("Get", video.split('/')[2], 'feature map.')
+        Video_Features_all[video.split('/')[2]] = get_video_features(video, Step)
+        print("Get", video.split('/')[2], 'feature map.')
     # 存储特征图序列
     trained_Feature = open('../trained_feature.pkl', 'wb')
     pickle.dump(Video_Features_all, trained_Feature)
@@ -183,3 +192,7 @@ def search_process(setp, sample_path):
     for i in sorted_Dist:
         print(i)
     return sorted_Dist
+
+
+if __name__ == '__main__':
+    get_thumbs('../Videos4Retrieval')

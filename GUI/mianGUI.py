@@ -8,6 +8,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from Video_Retrieval import GetFeatures, Search_Process
+import sys
+import cv2 as cv
 
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
@@ -21,81 +23,19 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.centralwidget.setObjectName("centralwidget")
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setGeometry(QtCore.QRect(10, 110, 771, 441))
+        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 769, 439))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 756, 439))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayoutWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 0, 771, 441))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 2, 160, 80))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
-        self.viewlayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
-        self.viewlayout.setContentsMargins(10, 10, 10, 10)
-        self.viewlayout.setSpacing(15)
-        self.viewlayout.setObjectName("viewlayout")
-        self.graphicsView_4 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_4.setObjectName("graphicsView_4")
-        self.viewlayout.addWidget(self.graphicsView_4, 2, 0, 1, 1)
-        self.label_1 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_1.setObjectName("label_1")
-        self.viewlayout.addWidget(self.label_1, 1, 0, 1, 1)
-        self.graphicsView_7 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_7.setObjectName("graphicsView_7")
-        self.viewlayout.addWidget(self.graphicsView_7, 4, 0, 1, 1)
-        self.graphicsView_1 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_1.setObjectName("graphicsView_1")
-        self.viewlayout.addWidget(self.graphicsView_1, 0, 0, 1, 1)
-        self.label_3 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_3.setObjectName("label_3")
-        self.viewlayout.addWidget(self.label_3, 1, 2, 1, 1)
-        self.graphicsView_2 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_2.setObjectName("graphicsView_2")
-        self.viewlayout.addWidget(self.graphicsView_2, 0, 1, 1, 1)
-        self.label_5 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_5.setObjectName("label_5")
-        self.viewlayout.addWidget(self.label_5, 3, 1, 1, 1)
-        self.graphicsView_8 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_8.setObjectName("graphicsView_8")
-        self.viewlayout.addWidget(self.graphicsView_8, 4, 1, 1, 1)
-        self.label_7 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_7.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_7.setObjectName("label_7")
-        self.viewlayout.addWidget(self.label_7, 5, 0, 1, 1)
-        self.graphicsView_5 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_5.setObjectName("graphicsView_5")
-        self.viewlayout.addWidget(self.graphicsView_5, 2, 1, 1, 1)
-        self.label_9 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_9.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_9.setObjectName("label_9")
-        self.viewlayout.addWidget(self.label_9, 5, 2, 1, 1)
-        self.graphicsView_3 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_3.setObjectName("graphicsView_3")
-        self.viewlayout.addWidget(self.graphicsView_3, 0, 2, 1, 1)
-        self.graphicsView_9 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_9.setObjectName("graphicsView_9")
-        self.viewlayout.addWidget(self.graphicsView_9, 4, 2, 1, 1)
-        self.graphicsView_6 = QtWidgets.QGraphicsView(self.gridLayoutWidget)
-        self.graphicsView_6.setObjectName("graphicsView_6")
-        self.viewlayout.addWidget(self.graphicsView_6, 2, 2, 1, 1)
-        self.label_4 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_4.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_4.setObjectName("label_4")
-        self.viewlayout.addWidget(self.label_4, 3, 0, 1, 1)
-        self.label_2 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.viewlayout.addWidget(self.label_2, 1, 1, 1, 1)
-        self.label_6 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_6.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_6.setObjectName("label_6")
-        self.viewlayout.addWidget(self.label_6, 3, 2, 1, 1)
-        self.label_8 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.label_8.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_8.setObjectName("label_8")
-        self.viewlayout.addWidget(self.label_8, 5, 1, 1, 1)
+        self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 491, 80))
@@ -120,12 +60,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.horizontalLayout.addWidget(self.confirm_btn)
         # MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 31))
         self.menubar.setObjectName("menubar")
         self.menu_file = QtWidgets.QMenu(self.menubar)
         self.menu_file.setObjectName("menu_file")
-        self.menu_set = QtWidgets.QMenu(self.menubar)
-        self.menu_set.setObjectName("menu_set")
         self.menu_about = QtWidgets.QMenu(self.menubar)
         self.menu_about.setObjectName("menu_about")
         # MainWindow.setMenuBar(self.menubar)
@@ -148,26 +86,16 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "视频检索Demo"))
-        self.label_1.setText(_translate("MainWindow", "TextLabel"))
-        self.label_3.setText(_translate("MainWindow", "TextLabel"))
-        self.label_5.setText(_translate("MainWindow", "TextLabel"))
-        self.label_7.setText(_translate("MainWindow", "TextLabel"))
-        self.label_9.setText(_translate("MainWindow", "TextLabel"))
-        self.label_4.setText(_translate("MainWindow", "TextLabel"))
-        self.label_2.setText(_translate("MainWindow", "TextLabel"))
-        self.label_6.setText(_translate("MainWindow", "TextLabel"))
-        self.label_8.setText(_translate("MainWindow", "TextLabel"))
-        self.filepath_label.setText(_translate("MainWindow", "样例视频："))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.filepath_label.setText(_translate("MainWindow", "文件路径："))
         self.choosefile_btn.setText(_translate("MainWindow", "浏览"))
         self.confirm_btn.setText(_translate("MainWindow", "搜索"))
         self.menu_file.setTitle(_translate("MainWindow", "文件"))
-        self.menu_set.setTitle(_translate("MainWindow", "设置"))
         self.menu_about.setTitle(_translate("MainWindow", "关于"))
         self.actionopen_file.setText(_translate("MainWindow", "打开文件"))
 
     def OpenFile(self):
-        filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self, '打开文件', './', "视频文件(*.avi *.mp4)")
+        filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self, '打开文件', '.', "视频文件(*.avi *.mp4)")
         self.SAMPLE_PATH = filepath
         self.SAMPLE_NAME = filepath.split('/')[-1]
         self.filepath_lineEdit.setText(self.SAMPLE_NAME)
@@ -176,20 +104,35 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         if self.SAMPLE_PATH != '':
             print(self.SAMPLE_PATH)
             result_list = Search_Process.search_process(20, self.SAMPLE_PATH)
+            root_dir = '../Videos4Retrieval/'
+            thumb_dir = '../Videos4Retrieval/thumbs/'
+            for i in range(len(result_list)):
+                video_name = result_list[i][0].split('.')[0]
+                img = thumb_dir + video_name + '.jpg'
+                video_path = root_dir + video_name + '.avi'
+                a = i / 3
+                b = i % 3
+                pos = (a, b)
+                self.AddPictures(video_name, img, video_path, pos)
+                self.scrollAreaWidgetContents.setLayout(self.gridLayout)
         else:
             unselect_message = QtWidgets.QMessageBox.information(self, "未选择样例视频", "请先选择需要进行搜索的样例视频。")
 
-    def AddPictures(self, name, path):
+    def AddPictures(self, name, image, path, pos):
+        image_p = cv.imread(image)
+        height = image_p.shape[0]
+        width = image_p.shape[1]
         pic_button = QtWidgets.QToolButton()
         pic_button.setText(name)
-        pic_button.setIcon(path)
-        pic_button.setIconSize(QtCore.QSize(240, 320))
+        pic_button.setIcon(QtGui.QIcon(image))
+        pic_button.setIconSize(QtCore.QSize(height, width))
         pic_button.setAutoRaise(True)
         pic_button.setToolButtonStyle(Qt.Qt.ToolButtonTextUnderIcon)
 
+        self.gridLayout.addWidget(pic_button, *pos)
+
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
     ui = Ui_MainWindow()
