@@ -135,9 +135,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.gridLayout.addWidget(pic_button, *pos)
 
     def PlayVideo(self, path, start):
-        print('Play video')
-        video_dir = ''
-        os.system('mpv ' + path + ' --start=' + start)
+        os.system('mpv ' + path + ' --start=' + start)     # play video use mpv on ubuntu
         pass
 
 
