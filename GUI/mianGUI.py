@@ -10,6 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from Video_Retrieval import GetFeatures, Search_Process
 import sys
 import cv2 as cv
+import os
 
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
@@ -17,7 +18,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     SAMPLE_NAME = ''
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("视频搜索Demo")
         MainWindow.resize(797, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -86,7 +87,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "视频搜索Demo"))
         self.filepath_label.setText(_translate("MainWindow", "文件路径："))
         self.choosefile_btn.setText(_translate("MainWindow", "浏览"))
         self.confirm_btn.setText(_translate("MainWindow", "搜索"))
@@ -108,28 +109,36 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             thumb_dir = '../Videos4Retrieval/thumbs/'
             for i in range(len(result_list)):
                 video_name = result_list[i][0].split('.')[0]
+                starttime = result_list[i][1][1]
                 img = thumb_dir + video_name + '.jpg'
                 video_path = root_dir + video_name + '.avi'
-                a = i / 3
-                b = i % 3
+                a = i / 4
+                b = i % 4
                 pos = (a, b)
-                self.AddPictures(video_name, img, video_path, pos)
+                self.AddPictures(video_name, img, video_path, pos, starttime)
                 self.scrollAreaWidgetContents.setLayout(self.gridLayout)
         else:
             unselect_message = QtWidgets.QMessageBox.information(self, "未选择样例视频", "请先选择需要进行搜索的样例视频。")
 
-    def AddPictures(self, name, image, path, pos):
+    def AddPictures(self, name, image, path, pos, start):
         image_p = cv.imread(image)
-        height = image_p.shape[0]
-        width = image_p.shape[1]
+        height = image_p.shape[0]/2
+        width = image_p.shape[1]/2
         pic_button = QtWidgets.QToolButton()
         pic_button.setText(name)
         pic_button.setIcon(QtGui.QIcon(image))
-        pic_button.setIconSize(QtCore.QSize(height, width))
+        pic_button.setIconSize(QtCore.QSize(width, height))
         pic_button.setAutoRaise(True)
         pic_button.setToolButtonStyle(Qt.Qt.ToolButtonTextUnderIcon)
+        pic_button.clicked.connect(lambda: self.PlayVideo(path, start))
 
         self.gridLayout.addWidget(pic_button, *pos)
+
+    def PlayVideo(self, path, start):
+        print('Play video')
+        video_dir = ''
+        os.system('mpv ' + path + ' --start=' + start)
+        pass
 
 
 if __name__ == "__main__":
