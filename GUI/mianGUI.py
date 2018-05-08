@@ -118,7 +118,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 self.AddPictures(video_name, img, video_path, pos, starttime)
                 self.scrollAreaWidgetContents.setLayout(self.gridLayout)
         else:
-            unselect_message = QtWidgets.QMessageBox.information(self, "未选择样例视频", "请先选择需要进行搜索的样例视频。")
+            QtWidgets.QMessageBox.information(self, "未选择样例视频", "请先选择需要进行搜索的样例视频。")
 
     def AddPictures(self, name, image, path, pos, start):
         image_p = cv.imread(image)

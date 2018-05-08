@@ -34,7 +34,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>756</width>
+       <width>752</width>
        <height>439</height>
       </rect>
      </property>
@@ -71,7 +71,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>文件路径：</string>
+        <string>样例视频：</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -110,7 +110,7 @@
      <x>0</x>
      <y>0</y>
      <width>797</width>
-     <height>31</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -124,7 +124,13 @@
      <string>关于</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>设置</string>
+    </property>
+   </widget>
    <addaction name="menu_file"/>
+   <addaction name="menu"/>
    <addaction name="menu_about"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
