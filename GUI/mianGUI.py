@@ -62,22 +62,22 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         # MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 31))
-        self.menubar.setObjectName("menubar")
-        self.menu_file = QtWidgets.QMenu(self.menubar)
-        self.menu_file.setObjectName("menu_file")
-        self.menu_about = QtWidgets.QMenu(self.menubar)
-        self.menu_about.setObjectName("menu_about")
+        # self.menubar.setObjectName("menubar")
+        # self.menu_file = QtWidgets.QMenu(self.menubar)
+        # self.menu_file.setObjectName("menu_file")
+        # self.menu_about = QtWidgets.QMenu(self.menubar)
+        # self.menu_about.setObjectName("menu_about")
         # MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         # MainWindow.setStatusBar(self.statusbar)
-        self.actionopen_file = QtWidgets.QAction(MainWindow)
-        self.actionopen_file.setIconText("打开文件")
-        self.actionopen_file.setIconVisibleInMenu(True)
-        self.actionopen_file.setObjectName("actionopen_file")
-        self.menu_file.addAction(self.actionopen_file)
-        self.menubar.addAction(self.menu_file.menuAction())
-        self.menubar.addAction(self.menu_about.menuAction())
+        # self.actionopen_file = QtWidgets.QAction(MainWindow)
+        # self.actionopen_file.setIconText("打开文件")
+        # self.actionopen_file.setIconVisibleInMenu(True)
+        # self.actionopen_file.setObjectName("actionopen_file")
+        # self.menu_file.addAction(self.actionopen_file)
+        # self.menubar.addAction(self.menu_file.menuAction())
+        # self.menubar.addAction(self.menu_about.menuAction())
 
         self.choosefile_btn.clicked.connect(self.OpenFile)
         self.confirm_btn.clicked.connect(self.SearchVideo)
@@ -88,12 +88,12 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "视频搜索Demo"))
-        self.filepath_label.setText(_translate("MainWindow", "文件路径："))
+        self.filepath_label.setText(_translate("MainWindow", "样例视频："))
         self.choosefile_btn.setText(_translate("MainWindow", "浏览"))
         self.confirm_btn.setText(_translate("MainWindow", "搜索"))
-        self.menu_file.setTitle(_translate("MainWindow", "文件"))
-        self.menu_about.setTitle(_translate("MainWindow", "关于"))
-        self.actionopen_file.setText(_translate("MainWindow", "打开文件"))
+        # self.menu_file.setTitle(_translate("MainWindow", "文件"))
+        # self.menu_about.setTitle(_translate("MainWindow", "关于"))
+        # self.actionopen_file.setText(_translate("MainWindow", "打开文件"))
 
     def OpenFile(self):
         filepath, _ = QtWidgets.QFileDialog.getOpenFileName(self, '打开文件', '.', "视频文件(*.avi *.mp4)")
@@ -118,7 +118,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 self.AddPictures(video_name, img, video_path, pos, starttime)
                 self.scrollAreaWidgetContents.setLayout(self.gridLayout)
         else:
-            unselect_message = QtWidgets.QMessageBox.information(self, "未选择样例视频", "请先选择需要进行搜索的样例视频。")
+            QtWidgets.QMessageBox.information(self, "未选择样例视频", "请先选择需要进行搜索的样例视频。")
 
     def AddPictures(self, name, image, path, pos, start):
         image_p = cv.imread(image)
@@ -136,7 +136,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def PlayVideo(self, path, start):
         os.system('mpv ' + path + ' --start=' + start)     # play video use mpv on ubuntu
-        pass
 
 
 if __name__ == "__main__":
