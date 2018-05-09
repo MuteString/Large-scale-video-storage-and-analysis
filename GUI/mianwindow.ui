@@ -128,6 +128,7 @@
     <property name="title">
      <string>设置</string>
     </property>
+    <addaction name="action"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu"/>
@@ -136,13 +137,18 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionopen_file">
    <property name="text">
-    <string>打开文件</string>
+    <string>选择样例视频</string>
    </property>
    <property name="iconText">
     <string notr="true">打开文件</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>系统设置</string>
    </property>
   </action>
  </widget>
