@@ -18,7 +18,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     SAMPLE_NAME = ''
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("视频搜索Demo")
         MainWindow.resize(797, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -28,10 +28,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 752, 439))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 756, 439))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayoutWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 0, 751, 80))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 2, 160, 80))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
