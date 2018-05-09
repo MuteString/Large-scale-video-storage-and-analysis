@@ -96,7 +96,31 @@
       </layout>
      </item>
      <item row="0" column="0">
-      <widget class="QTableWidget" name="tableWidget"/>
+      <widget class="QTableWidget" name="tableWidget">
+       <property name="rowCount">
+        <number>6</number>
+       </property>
+       <property name="columnCount">
+        <number>2</number>
+       </property>
+       <attribute name="horizontalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>178</number>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <column/>
+       <column/>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -173,11 +197,6 @@
     <string>取消</string>
    </property>
   </widget>
-  <zorder>groupBox</zorder>
-  <zorder>groupBox_2</zorder>
-  <zorder>sure_btn</zorder>
-  <zorder>cancel_btn</zorder>
-  <zorder>radioButton_3</zorder>
  </widget>
  <resources/>
  <connections/>
