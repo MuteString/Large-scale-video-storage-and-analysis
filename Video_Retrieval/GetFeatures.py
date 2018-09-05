@@ -84,7 +84,7 @@ def hsv_features(image_H, image_S, image_V, image_height, image_width):
             tmp_v = math.floor(image_V[i][j] / 0.333334)
             d = tmp_h * 9 + tmp_s * 3 + tmp_v
             t_feature[d] = t_feature[d] + 2
-
+    t_feature = t_feature/(image_height*image_width)
     return list(t_feature)
 
 
@@ -123,14 +123,17 @@ def get_lbp(r, n, image_gray):
     # lbp算子初始化
     radius = r
     n_points = n
+    image_height = image_gray.shape[0]
+    image_width = image_gray.shape[1]
 
     lbp = local_binary_pattern(image_gray, n_points, radius)  # 提取LBP特征
     lbp_vec = apply_mapping(lbp, mapping)                # 映射特征到特征向量
+    lbp_vec = np.array(lbp_vec)/(image_height*image_width)
     return lbp_vec
 
 
 def lbp_feature(image_gray):
-    return get_lbp(2, 8, image_gray)+ get_lbp(3, 8, image_gray) + get_lbp(4, 8, image_gray)
+    return get_lbp(2, 8, image_gray) + get_lbp(3, 8, image_gray) + get_lbp(4, 8, image_gray)
 
 """
 Tchebichef矩特征提取
@@ -150,8 +153,8 @@ def B(v, q, r, image_height, image_width, image):
     b1 = F(r, 0, image_height, image_width, image)
     b2 = F(r, 1, image_height, image_width, image)
 
-    for i in range(2,359):
-        b1 = F(r,v,image_height, image_width, image)+b2*2*math.cos(q)-b1
+    for i in range(2, 359):
+        b1 = F(r, v, image_height, image_width, image)+b2*2*math.cos(q)-b1
         temp = b1
         b1 = b2
         b2 = temp
@@ -164,7 +167,7 @@ def T(p, r, N):
     elif p == 1:
         t = (2*r+1-N)/N
     else:
-        t = ((2*p-1)*(2*r+1-N)/N*T(p-1, r, N)-(p-1)*T(p-2,r,N)*(N**p-(p-1)**2))/p/N**p
+        t = ((2*p-1)*(2*r+1-N)/N*T(p-1, r, N)-(p-1)*T(p-2, r, N)*(N**p-(p-1)**2))/p/N**p
     return t
 
 
@@ -254,7 +257,7 @@ def get_features(image):
 # 测试脚本
 if __name__ == '__main__':
     image = cv.imread('v_shooting_01_01_0.jpg')
+    # image = cv.imread('v_golf_25_05_keyFrame_1.jpg')
     my_feature = get_features(image)
     print(my_feature)
     print(len(my_feature))
-    pass
