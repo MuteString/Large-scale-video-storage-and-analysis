@@ -223,6 +223,8 @@ def glcm_feature(image_gray):
                           int(greycoprops(image_glcm, 'energy')),
                           int(greycoprops(image_glcm, 'ASM')),
                           int(greycoprops(image_glcm, 'correlation'))]
+    # image_glcm_feature = (image_glcm_feature-np.min(image_glcm_feature))/(np.max(image_glcm_feature)-np.min(image_glcm_feature))
+    # return list(image_glcm_feature)
     return image_glcm_feature
 
 

@@ -94,8 +94,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "视频检索Demo"))
-        self.filepath_label.setText(_translate("MainWindow", "样例视频："))
+        MainWindow.setWindowTitle(_translate("MainWindow", "视频检索"))
+        self.filepath_label.setText(_translate("MainWidd20.ndow", "样例视频："))
         self.choosefile_btn.setText(_translate("MainWindow", "浏览"))
         self.confirm_btn.setText(_translate("MainWindow", "搜索"))
         self.menu_file.setTitle(_translate("MainWindow", "文件"))
@@ -116,7 +116,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             result_list = Search_Process.search_process(20, self.SAMPLE_PATH)
             root_dir = '../Videos4Retrieval/'
             thumb_dir = '../Videos4Retrieval/thumbs/'
-            for i in range(len(result_list)):
+            # for i in range(len(result_list)):
+            for i in range(50):
                 video_name = result_list[i][0].split('.')[0]
                 starttime = result_list[i][1][1]
                 img = thumb_dir + video_name + '.jpg'
